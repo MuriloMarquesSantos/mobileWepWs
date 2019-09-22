@@ -1,9 +1,13 @@
 package com.appsdeveloperblog.app.ws.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +20,7 @@ import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.Utils;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
+import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessage;
 import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
 
 @Service
@@ -73,7 +78,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findUserByUserId(id);
 
         if (userEntity == null) {
-            throw new UsernameNotFoundException(id);
+            throw new UsernameNotFoundException("User with id " + id + " not found.");
         }
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
@@ -110,6 +115,29 @@ public class UserServiceImpl implements UserService {
         }
 
             userRepository.delete(userEntity);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers(int page, int limit) {
+
+        Pageable pageableRequest = PageRequest.of(page, limit);
+
+        Page<UserEntity> usersPage = userRepository.findAll(pageableRequest);
+        List<UserEntity> userEntities = usersPage.getContent();
+
+        if (userEntities.isEmpty()) {
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        }
+
+        List<UserDto> returnValues = new ArrayList<>();
+        userEntities.forEach(u ->  {
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(u, userDto);
+            returnValues.add(userDto);
+        });
+
+        return returnValues;
+
     }
 
     @Override
