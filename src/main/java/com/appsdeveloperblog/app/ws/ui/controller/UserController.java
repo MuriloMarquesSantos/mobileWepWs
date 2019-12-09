@@ -3,6 +3,7 @@ package com.appsdeveloperblog.app.ws.ui.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.service.UserService;
-import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
+import com.appsdeveloperblog.app.ws.shared.dto.UserDTO;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
@@ -37,7 +37,7 @@ public class UserController {
 
         UserRest returnValue = new UserRest();
 
-        UserDto userDto = userService.getUserByUserId(id);
+        UserDTO userDto = userService.getUserByUserId(id);
 
         BeanUtils.copyProperties(userDto, returnValue);
 
@@ -54,7 +54,7 @@ public class UserController {
 
         List<UserRest> returnValues = new ArrayList<>();
 
-        List<UserDto> userDto = userService.getAllUsers(page, limit);
+        List<UserDTO> userDto = userService.getAllUsers(page, limit);
 
         userDto.forEach(u -> {
             UserRest userRest = new UserRest();
@@ -74,11 +74,10 @@ public class UserController {
             throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
         }
 
-        UserDto userDto = new UserDto();
+        ModelMapper modelMapper = new ModelMapper();
+        UserDTO userDto = modelMapper.map(userDetails, UserDTO.class);
 
-        BeanUtils.copyProperties(userDetails, userDto);
-
-        UserDto createdUser = userService.createUser(userDto);
+        UserDTO createdUser = userService.createUser(userDto);
 
         BeanUtils.copyProperties(createdUser, returnValue);
 
@@ -90,11 +89,11 @@ public class UserController {
     public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetailsRequestModel) {
         UserRest returnValue = new UserRest();
 
-        UserDto userDto = new UserDto();
+        UserDTO userDto = new UserDTO();
 
         BeanUtils.copyProperties(userDetailsRequestModel, userDto);
 
-        UserDto updatedUser = userService.updateUser(id, userDto);
+        UserDTO updatedUser = userService.updateUser(id, userDto);
 
         BeanUtils.copyProperties(updatedUser, returnValue);
 

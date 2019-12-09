@@ -19,8 +19,7 @@ import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
 import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.Utils;
-import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
-import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessage;
+import com.appsdeveloperblog.app.ws.shared.dto.UserDTO;
 import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
 
 @Service
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(UserDto user) {
+    public UserDTO createUser(UserDTO user) {
 
         if (userRepository.findUserByEmail(user.getEmail()) != null)
             throw new RuntimeException("Record already exists");
@@ -54,40 +53,40 @@ public class UserServiceImpl implements UserService {
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
-        UserDto returnValue = new UserDto();
+        UserDTO returnValue = new UserDTO();
         BeanUtils.copyProperties(storedUserDetails, returnValue);
 
         return returnValue;
     }
 
     @Override
-    public UserDto getUser(String email) {
+    public UserDTO getUser(String email) {
         UserEntity userEntity = userRepository.findUserByEmail(email);
 
         if (userEntity == null) {
             throw new UsernameNotFoundException(email);
         }
-        UserDto returnValue = new UserDto();
+        UserDTO returnValue = new UserDTO();
         BeanUtils.copyProperties(userEntity, returnValue);
 
         return returnValue;
     }
 
     @Override
-    public UserDto getUserByUserId(String id) {
+    public UserDTO getUserByUserId(String id) {
         UserEntity userEntity = userRepository.findUserByUserId(id);
 
         if (userEntity == null) {
             throw new UsernameNotFoundException("User with id " + id + " not found.");
         }
-        UserDto returnValue = new UserDto();
+        UserDTO returnValue = new UserDTO();
         BeanUtils.copyProperties(userEntity, returnValue);
 
         return returnValue;
     }
 
     @Override
-    public UserDto updateUser(String id, UserDto userDto) {
+    public UserDTO updateUser(String id, UserDTO userDto) {
 
         UserEntity userEntity = userRepository.findUserByUserId(id);
 
@@ -100,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
-        UserDto returnValue = new UserDto();
+        UserDTO returnValue = new UserDTO();
         BeanUtils.copyProperties(storedUserDetails, returnValue);
 
         return returnValue;
@@ -118,7 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers(int page, int limit) {
+    public List<UserDTO> getAllUsers(int page, int limit) {
 
         Pageable pageableRequest = PageRequest.of(page, limit);
 
@@ -129,9 +128,9 @@ public class UserServiceImpl implements UserService {
             throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
         }
 
-        List<UserDto> returnValues = new ArrayList<>();
+        List<UserDTO> returnValues = new ArrayList<>();
         userEntities.forEach(u ->  {
-            UserDto userDto = new UserDto();
+            UserDTO userDto = new UserDTO();
             BeanUtils.copyProperties(u, userDto);
             returnValues.add(userDto);
         });
