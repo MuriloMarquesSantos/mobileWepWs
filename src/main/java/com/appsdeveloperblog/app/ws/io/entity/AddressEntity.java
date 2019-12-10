@@ -1,19 +1,40 @@
-package com.appsdeveloperblog.app.ws.shared.dto;
+package com.appsdeveloperblog.app.ws.io.entity;
 
+import com.appsdeveloperblog.app.ws.shared.dto.UserDTO;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
-public class AddressDTO implements Serializable {
+@Entity(name="addresses")
+public class AddressEntity implements Serializable {
 
-    private static final long serialVersionUID = 3713027301740135740L;
+    private static final long serialVersionUID = -4671966835663480104L;
 
+    @Id
+    @GeneratedValue
     private long id;
+
+    @Column(length = 30, nullable = false)
     private String addressId;
+
+    @Column(length = 15, nullable = false)
     private String city;
+
+    @Column(length = 15, nullable = false)
     private String country;
+
+    @Column(length = 100, nullable = false)
     private String streetName;
+
+    @Column(length = 7, nullable = false)
     private String postalCode;
+
+    @Column(length = 10, nullable = false)
     private String type;
-    private UserDTO userDetails;
+
+    @ManyToOne
+    @JoinColumn(name="users_id")
+    private UserEntity userDetails;
 
     public long getId() {
         return id;
@@ -21,6 +42,14 @@ public class AddressDTO implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 
     public String getCity() {
@@ -63,19 +92,11 @@ public class AddressDTO implements Serializable {
         this.type = type;
     }
 
-    public UserDTO getUserDetails() {
+    public UserEntity getUserDetails() {
         return userDetails;
     }
 
-    public void setUserDetails(UserDTO userDetails) {
+    public void setUserDetails(UserEntity userDetails) {
         this.userDetails = userDetails;
-    }
-
-    public String getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(String addressId) {
-        this.addressId = addressId;
     }
 }
