@@ -1,6 +1,7 @@
 package com.appsdeveloperblog.app.ws.shared.dto;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 public class UserDTO implements Serializable {
@@ -91,7 +92,7 @@ public class UserDTO implements Serializable {
     }
 
     public List<AddressDTO> getAddresses() {
-        return addresses;
+        return addresses == null ? Collections.emptyList() : addresses;
     }
 
     public void setAddresses(List<AddressDTO> addresses) {

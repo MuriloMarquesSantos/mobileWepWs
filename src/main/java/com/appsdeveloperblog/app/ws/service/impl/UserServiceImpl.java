@@ -45,12 +45,13 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findUserByEmail(user.getEmail()) != null)
             throw new RuntimeException("Record already exists");
 
+        setDataInAddress(user);
+
         ModelMapper modelMapper = new ModelMapper();
 
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
         String publicUserId = utils.generateUserId(30);
-        setDataInAddress(user);
         userEntity.setUserId(publicUserId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
         user.getAddresses().forEach(addressDTO -> {
             addressDTO.setUserDetails(user);
             addressDTO.setAddressId(utils.generateAddressId(30));
-            user.getAddresses().add(addressDTO);
+            user.getAddresses().set(user.getAddresses().indexOf(addressDTO), addressDTO);
         });
     }
 

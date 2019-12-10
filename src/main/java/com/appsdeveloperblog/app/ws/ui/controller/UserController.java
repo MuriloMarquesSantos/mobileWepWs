@@ -68,7 +68,7 @@ public class UserController {
     @PostMapping(consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
         MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
-        UserRest returnValue = new UserRest();
+        UserRest returnValue;
 
         if (userDetails.getFirstName() == null || userDetails.getFirstName().isEmpty()) {
             throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
@@ -79,7 +79,7 @@ public class UserController {
 
         UserDTO createdUser = userService.createUser(userDto);
 
-        returnValue = modelMapper.map(userDto, UserRest.class);
+        returnValue = modelMapper.map(createdUser, UserRest.class);
 
         return returnValue;
     }
