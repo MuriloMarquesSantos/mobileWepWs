@@ -35,11 +35,9 @@ public class UserController {
     @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest getUser(@PathVariable String id) {
 
-        UserRest returnValue = new UserRest();
-
         UserDTO userDto = userService.getUserByUserId(id);
 
-        BeanUtils.copyProperties(userDto, returnValue);
+        UserRest returnValue = new ModelMapper().map(userDto, UserRest.class);
 
         return returnValue;
     }
@@ -56,9 +54,10 @@ public class UserController {
 
         List<UserDTO> userDto = userService.getAllUsers(page, limit);
 
+        ModelMapper modelMapper = new ModelMapper();
+
         userDto.forEach(u -> {
-            UserRest userRest = new UserRest();
-            BeanUtils.copyProperties(u, userRest);
+            UserRest userRest = modelMapper.map(u, UserRest.class);
             returnValues.add(userRest);
         });
 
@@ -85,20 +84,18 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}", consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
-        MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+            MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetailsRequestModel) {
-        UserRest returnValue = new UserRest();
 
-        UserDTO userDto = new UserDTO();
+        ModelMapper modelMapper = new ModelMapper();
 
-        BeanUtils.copyProperties(userDetailsRequestModel, userDto);
+        UserDTO userDto = modelMapper.map(userDetailsRequestModel, UserDTO.class);
 
         UserDTO updatedUser = userService.updateUser(id, userDto);
 
-        BeanUtils.copyProperties(updatedUser, returnValue);
+        UserRest returnValue = modelMapper.map(updatedUser, UserRest.class);
 
         return returnValue;
-
     }
 
     @DeleteMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })

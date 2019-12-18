@@ -1,5 +1,7 @@
 package com.appsdeveloperblog.app.ws.io.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
@@ -34,6 +36,7 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private Boolean emailVerificationStatus = false;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="userDetails", cascade=CascadeType.ALL)
     private List<AddressEntity> addresses;
 
