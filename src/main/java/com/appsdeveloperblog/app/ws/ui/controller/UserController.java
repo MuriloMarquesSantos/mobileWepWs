@@ -1,7 +1,7 @@
 package com.appsdeveloperblog.app.ws.ui.controller;
 
 import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
-import com.appsdeveloperblog.app.ws.service.AddressesService;
+import com.appsdeveloperblog.app.ws.service.AddressService;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.dto.AddressDTO;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDTO;
@@ -24,12 +24,12 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    private AddressesService addressesService;
+    private AddressService addressService;
 
     @Autowired
-    public UserController(UserService userService, AddressesService addressesService) {
+    public UserController(UserService userService, AddressService addressService) {
         this.userService = userService;
-        this.addressesService = addressesService;
+        this.addressService = addressService;
     }
 
     @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
@@ -107,7 +107,7 @@ public class UserController {
 
     @GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public List<AddressesRest> getUserAddresses(@PathVariable String id) {
-        List<AddressDTO> addressDTOS = addressesService.getAddressesByUserId(id);
+        List<AddressDTO> addressDTOS = addressService.getAddressesByUserId(id);
 
         List<AddressesRest> returnValues = new ArrayList<>();
 

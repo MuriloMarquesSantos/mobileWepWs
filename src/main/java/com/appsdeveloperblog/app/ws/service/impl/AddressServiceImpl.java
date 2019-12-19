@@ -2,9 +2,9 @@ package com.appsdeveloperblog.app.ws.service.impl;
 
 import com.appsdeveloperblog.app.ws.io.entity.AddressEntity;
 import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
-import com.appsdeveloperblog.app.ws.io.repository.AddressesRepository;
+import com.appsdeveloperblog.app.ws.io.repository.AddressRepository;
 import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
-import com.appsdeveloperblog.app.ws.service.AddressesService;
+import com.appsdeveloperblog.app.ws.service.AddressService;
 import com.appsdeveloperblog.app.ws.shared.dto.AddressDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class AddressesServiceImpl implements AddressesService {
+public class AddressServiceImpl implements AddressService {
 
     private final UserRepository userRepository;
 
-    private final AddressesRepository addressesRepository;
+    private final AddressRepository addressRepository;
 
     @Autowired
-    public AddressesServiceImpl(UserRepository userRepository, AddressesRepository addressesRepository) {
+    public AddressServiceImpl(UserRepository userRepository, AddressRepository addressRepository) {
         this.userRepository = userRepository;
-        this.addressesRepository = addressesRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class AddressesServiceImpl implements AddressesService {
             throw  new UsernameNotFoundException("User not Found");
         }
 
-        List<AddressEntity> addressEntities = addressesRepository.findAllByUserDetails(userEntity);
+        List<AddressEntity> addressEntities = addressRepository.findAllByUserDetails(userEntity);
         List<AddressDTO> returnValues = new ArrayList<>();
 
         if(addressEntities.isEmpty() || addressEntities == null) {
