@@ -1,36 +1,36 @@
 package com.appsdeveloperblog.app.ws.ui.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
+import com.appsdeveloperblog.app.ws.service.AddressesService;
+import com.appsdeveloperblog.app.ws.service.UserService;
+import com.appsdeveloperblog.app.ws.shared.dto.AddressDTO;
+import com.appsdeveloperblog.app.ws.shared.dto.UserDTO;
+import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
+import com.appsdeveloperblog.app.ws.ui.model.response.AddressesRest;
+import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
+import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
-import com.appsdeveloperblog.app.ws.service.UserService;
-import com.appsdeveloperblog.app.ws.shared.dto.UserDTO;
-import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
-import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
-import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("users")
 public class UserController {
 
-    @Autowired UserService userService;
+    private UserService userService;
+    private AddressesService addressesService;
+
+    @Autowired
+    public UserController(UserService userService, AddressesService addressesService) {
+        this.userService = userService;
+        this.addressesService = addressesService;
+    }
 
     @GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest getUser(@PathVariable String id) {
@@ -103,6 +103,17 @@ public class UserController {
         userService.deleteUser(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public List<AddressesRest> getUserAddresses(@PathVariable String id) {
+        List<AddressDTO> addressDTOS = addressesService.getAddressesByUserId(id);
+
+        List<AddressesRest> returnValues = new ArrayList<>();
+
+        addressDTOS.forEach(addressDTO -> returnValues.add(new ModelMapper().map(addressDTO, AddressesRest.class)));
+
+        return returnValues;
     }
 
 }
