@@ -11,6 +11,7 @@ import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,8 @@ public class UserController {
     }
 
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public List<UserRest> getAllUsers(@RequestParam(value = "page", defaultValue = "0") int page,
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<List<UserRest>> getAllUsers(@RequestParam(value = "page", defaultValue = "0") int page,
         @RequestParam(value = "limit", defaultValue = "25") int limit) {
 
         if (page > 0 ) {
@@ -61,7 +63,14 @@ public class UserController {
             returnValues.add(userRest);
         });
 
-        return returnValues;
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.set("Access-Control-Allow-Origin", "*");
+//        httpHeaders.set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+//        httpHeaders.set("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
+
+        return ResponseEntity.ok()
+//                .headers(httpHeaders)
+                .body(returnValues);
     }
 
     @PostMapping(consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
