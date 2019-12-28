@@ -44,7 +44,6 @@ public class UserController {
     }
 
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<UserRest>> getAllUsers(@RequestParam(value = "page", defaultValue = "0") int page,
         @RequestParam(value = "limit", defaultValue = "25") int limit) {
 
@@ -63,13 +62,7 @@ public class UserController {
             returnValues.add(userRest);
         });
 
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.set("Access-Control-Allow-Origin", "*");
-//        httpHeaders.set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
-//        httpHeaders.set("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
-
         return ResponseEntity.ok()
-//                .headers(httpHeaders)
                 .body(returnValues);
     }
 

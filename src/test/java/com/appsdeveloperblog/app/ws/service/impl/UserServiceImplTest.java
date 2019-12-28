@@ -30,7 +30,10 @@ public class UserServiceImplTest {
 
     @Test
     public void getUser() {
-        UserEntity userEntity = new UserEntity();
+        UserEntity userEntity = UserEntity.builder()
+                .email("murilommms@gmail.com")
+                .build();
+
         userEntity.setEmail("murilommms@gmail.com");
         Mockito.when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(userEntity);
 
