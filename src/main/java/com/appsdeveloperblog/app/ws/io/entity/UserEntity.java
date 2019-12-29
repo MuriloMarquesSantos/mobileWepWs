@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -26,7 +27,8 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private String userId;
 
-    @Column(nullable = false, length = 50)
+    @NotNull
+    @Column(length = 50)
     private String firstName;
 
     @Column(nullable = false, length = 50)

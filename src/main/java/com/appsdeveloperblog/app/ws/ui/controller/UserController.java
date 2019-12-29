@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,14 +67,15 @@ public class UserController {
                 .body(returnValues);
     }
 
-    @PostMapping(consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
+    public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails) throws Exception {
         UserRest returnValue;
 
-        if (userDetails.getFirstName() == null || userDetails.getFirstName().isEmpty()) {
-            throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
-        }
+          //TO-DO Properly validate exception with ControllerAdvice
+//        if (userDetails.getFirstName() == null || userDetails.getFirstName().isEmpty()) {
+//            throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+//        }
 
         ModelMapper modelMapper = new ModelMapper();
         UserDTO userDto = modelMapper.map(userDetails, UserDTO.class);
@@ -82,7 +84,8 @@ public class UserController {
 
         returnValue = modelMapper.map(createdUser, UserRest.class);
 
-        return returnValue;
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(returnValue);
     }
 
     @PutMapping(path = "/{id}", consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
