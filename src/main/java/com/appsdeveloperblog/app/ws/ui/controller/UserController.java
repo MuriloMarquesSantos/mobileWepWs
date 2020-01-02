@@ -8,7 +8,6 @@ import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.AddressesRest;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ public class UserController {
     private UserService userService;
     private AddressService addressService;
 
-    @Autowired
     public UserController(UserService userService, AddressService addressService) {
         this.userService = userService;
         this.addressService = addressService;
