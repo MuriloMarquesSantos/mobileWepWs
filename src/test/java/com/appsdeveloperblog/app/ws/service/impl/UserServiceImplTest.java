@@ -5,15 +5,14 @@ import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceImplTest {
 
@@ -29,16 +28,21 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUser() {
+    public void getUserWithValidEmail_then_shouldReturnValidEntity() {
         UserEntity userEntity = UserEntity.builder()
-                .email("murilommms@gmail.com")
+                .email("user@gmail.com")
                 .build();
 
-        userEntity.setEmail("murilommms@gmail.com");
         Mockito.when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(userEntity);
 
-        UserDTO returnedValue = userServiceImpl.getUser("murilommms@gmail.com");
+        UserDTO returnedValue = userServiceImpl.getUser("usr@gmai.com");
 
         assertNotNull(returnedValue);
+    }
+
+    @Test
+    public void getUserWithInValidEmail_then_shouldThrowUsernameNotFoundException() {
+        Mockito.when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> userServiceImpl.getUser("user@gmai.com"));
     }
 }
