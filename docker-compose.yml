@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+
+  mobilews-api:
+    container_name: mobilews-api
+    restart: always
+    build:
+      context: .
+    volumes:
+      - ./target/:/mobilews
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mobilews-mysql
+    environment:
+      SPRING_PROFILES_ACTIVE: development
+      MYSQL_URL: jdbc:mysql://mobilews-mysql/photo_app
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+
+  mobilews-mysql:
+    container_name: mobilews-mysql
+    image: mysql:5.7.21
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: photo_app

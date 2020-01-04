@@ -1,0 +1,24 @@
+tokenSecret: jf9i4jgu83nfl0
+server:
+  servlet:
+    context-path: /mobile-app-ws
+spring:
+  application:
+    name: mobilews
+
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.jdbc.Driver
+
+  jpa:
+    database: mysql
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+
+  jackson:
+    default-property-inclusion: non_null

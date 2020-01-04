@@ -12,7 +12,7 @@
     <artifactId>mobile-app-ws</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>mobile-app-ws</name>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -61,6 +61,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
