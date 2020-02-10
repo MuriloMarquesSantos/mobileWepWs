@@ -30,7 +30,6 @@ This project is developed using the following technologies:
 
 # Running the application locally
 
-- I Have provided two ways of running application locally. It's up to you to choose which one to use.
 
  ### With Docker
  - Start Docker in your local machine after cloning the project.
