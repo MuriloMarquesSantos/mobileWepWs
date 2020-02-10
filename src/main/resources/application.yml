@@ -22,3 +22,8 @@ spring:
 
   jackson:
     default-property-inclusion: non_null
+
+  cache:
+    type: redis
+    host: localhost
+    port: 6379
