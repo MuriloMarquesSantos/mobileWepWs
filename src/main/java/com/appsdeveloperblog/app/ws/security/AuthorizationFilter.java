@@ -26,7 +26,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
         String header = request.getHeader(SecurityConstants.HEADER_STRING);
 
-        if ((header == null) | ((header != null) && header.startsWith(SecurityConstants.TOKEN_PREFIX))) {
+        if ((header == null) || !header.startsWith(SecurityConstants.TOKEN_PREFIX))) {
             chain.doFilter(request, response);
 
             return;
